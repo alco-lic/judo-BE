@@ -33,10 +33,14 @@ class SecurityConfig(
                     "/api/member/signup",
                     "/api/member/login",
                     "/api/auth/refresh",
-                ).anonymous()
+                    "/api/drink/**"
+                ).permitAll()
                     .requestMatchers(
                         "/api/member/**",
                         "/api/memo/**",
+                        "/api/drink/{drinkId}/reviews", // 리뷰 작성
+                        "/api/wishlist/**",
+                        "/api/cart/**",
                     ).hasRole("MEMBER")
             }
             .exceptionHandling { it.authenticationEntryPoint(customAuthenticationEntryPoint()) }
