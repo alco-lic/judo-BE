@@ -17,7 +17,7 @@ class CartController(
     private val cartService: CartService,
 ) {
     /**
-     * 상품 찜하기
+     * 장바구니 상품 추가하기
      */
     @PostMapping("/new")
     fun addCart(@RequestBody cartDto: CartDto): BaseResponse<Unit> {
@@ -27,7 +27,7 @@ class CartController(
     }
 
     /**
-     * 찜한 상품 보기
+     * 장바구니 상품 보기
      */
     @GetMapping("/all")
     fun getCart(): List<CartDto> {

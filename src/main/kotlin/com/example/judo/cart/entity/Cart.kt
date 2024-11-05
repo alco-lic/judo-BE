@@ -19,8 +19,10 @@ data class Cart(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "drink_id")
-    val drink: Drink
+    val drink: Drink,
+
+    val quantity: Int,
 ){
     fun toDto(): CartDto =
-        CartDto(id!!, drink.id)
+        CartDto(id!!, drink.id, drink.name, drink.price)
 }

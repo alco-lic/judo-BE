@@ -14,7 +14,7 @@ class Drink @JsonCreator constructor(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    val name: String? = null, // 주류 이름
+    val name: String, // 주류 이름
     @Enumerated(EnumType.STRING)
     val type: DrinkType? = null, // 주류 종류 (ex: whiskey, vodka, beer 등)
     val description: String? = null, // 주류 설명

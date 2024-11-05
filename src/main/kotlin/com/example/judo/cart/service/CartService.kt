@@ -24,7 +24,7 @@ class CartService(
             ?: throw InvalidInputException("상품을 찾을 수 없습니다.")
         val findCart = cartRepository.findOneByMemberAndDrink(findMember, findDrink)
 
-        if (findCart.isNotEmpty()) { // 이미 찜한 목록에 존재하는 경우
+        if (findCart.isNotEmpty()) {
             return "이미 장바구니에 존재하는 상품입니다."
         } else { // 찜한 목록에 없는 경우
             // 존재하지 않으면 추가
@@ -33,6 +33,7 @@ class CartService(
             val cart = Cart(
                 member = findMember,
                 drink = findDrink,
+                quantity = 1,
             )
             cartRepository.save(cart)
             return "장바구니 목록 저장 완료"

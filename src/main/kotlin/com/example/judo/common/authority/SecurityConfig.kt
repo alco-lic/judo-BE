@@ -41,6 +41,7 @@ class SecurityConfig(
                         "/api/drink/{drinkId}/reviews", // 리뷰 작성
                         "/api/wishlist/**",
                         "/api/cart/**",
+                        "/api/orders/**",
                     ).hasRole("MEMBER")
             }
             .exceptionHandling { it.authenticationEntryPoint(customAuthenticationEntryPoint()) }
