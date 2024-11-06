@@ -1,5 +1,7 @@
 package com.example.judo.orders.dto
 
+import com.example.judo.drink.entity.Drink
+
 data class OrderRequest(
     val paymentId: String, // 결제 ID
     val transactionType: String, // 거래 타입
@@ -16,4 +18,12 @@ data class OrderItemRequest(
     val quantity: Int,
     val name: String, // 음료 이름
     val price: Double // 가격
+)
+
+data class PaymentHistoryResponse(
+    val product: Drink, // 결제 상품
+    val amount: Double, // 결제 금액
+    val transactionType: String, // 거래 타입
+    val totalAmount: Double, // 총 금액
+    val address: String // 배송 주소
 )

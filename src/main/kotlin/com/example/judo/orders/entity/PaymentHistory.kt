@@ -1,6 +1,7 @@
 package com.example.judo.orders.entity
 
 import com.example.judo.drink.entity.Drink
+import com.example.judo.orders.dto.PaymentHistoryResponse
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -30,6 +31,16 @@ class PaymentHistory(
     val paymentId: String, // 결제 ID
     val transactionType: String, // 거래 타입
     val txId: String, // 거래 ID
-    val totalAmount: Double, // 총 금액 (수치형으로 변경)
+    val totalAmount: Double, // 총 금액
     val address: String // 배송 주소
-)
+){
+    fun toDto(): PaymentHistoryResponse {
+        return PaymentHistoryResponse(
+            product = this.product,
+            amount = this.amount,
+            transactionType = this.transactionType,
+            totalAmount = this.totalAmount,
+            address = this.address
+        )
+    }
+}
