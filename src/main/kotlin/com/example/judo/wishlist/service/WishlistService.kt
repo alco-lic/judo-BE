@@ -20,7 +20,7 @@ class WishlistService(
     fun toggleWishlist(userId: Long?, wishlistDto: WishlistDto): String {
         val findMember = memberRepository.findByIdOrNull(userId)
             ?: throw InvalidInputException("멤버를 찾을 수 없습니다.")
-        val findDrink = drinkRepository.findByIdOrNull(wishlistDto.drinkId)
+        val findDrink = drinkRepository.findByIdOrNull(wishlistDto.drink.id)
             ?: throw InvalidInputException("상품을 찾을 수 없습니다.")
         val findWishlist = wishlistRepository.findOneByMemberAndDrink(findMember, findDrink)
 
@@ -29,7 +29,7 @@ class WishlistService(
             return "찜한 목록 수정 완료"
         } else { // 찜한 목록에 없는 경우
             // 존재하지 않으면 추가
-            val findDrink = drinkRepository.findByIdOrNull(wishlistDto.drinkId)
+            val findDrink = drinkRepository.findByIdOrNull(wishlistDto.drink.id)
                 ?: throw InvalidInputException("상품을 찾을 수 없습니다.")
             val wishlist = Wishlist(
                 member = findMember,
@@ -46,4 +46,5 @@ class WishlistService(
         val findWishlist = wishlistRepository.findAllByMember(findMember)
         return findWishlist.map { it.toDto() }
     }
+
 }

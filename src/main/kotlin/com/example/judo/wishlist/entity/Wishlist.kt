@@ -22,5 +22,5 @@ data class Wishlist(
     val drink: Drink
 ){
     fun toDto(): WishlistDto =
-        WishlistDto(id!!, drink.id)
+        WishlistDto(id!!, drink = drink.toDto())
 }
