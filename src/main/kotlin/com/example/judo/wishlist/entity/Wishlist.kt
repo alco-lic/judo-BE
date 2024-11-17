@@ -2,7 +2,7 @@ package com.example.judo.wishlist.entity
 
 import com.example.judo.drink.entity.Drink
 import com.example.judo.member.entity.Member
-import com.example.judo.wishlist.dto.WishlistDto
+import com.example.judo.wishlist.dto.WishlistResponseDto
 import jakarta.persistence.*
 
 @Entity
@@ -21,6 +21,6 @@ data class Wishlist(
     @JoinColumn(name = "drink_id")
     val drink: Drink
 ){
-    fun toDto(): WishlistDto =
-        WishlistDto(id!!, drink = drink.toDto())
+    fun toDto(): WishlistResponseDto =
+        WishlistResponseDto(id!!, drink = drink.toDto())
 }

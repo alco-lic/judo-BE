@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDate
 
 @Entity
-class Drink @JsonCreator constructor(
+class Drink(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

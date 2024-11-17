@@ -3,6 +3,7 @@ package com.example.judo.wishlist.controller
 import com.example.judo.common.dto.BaseResponse
 import com.example.judo.common.dto.CustomUser
 import com.example.judo.wishlist.dto.WishlistDto
+import com.example.judo.wishlist.dto.WishlistResponseDto
 import com.example.judo.wishlist.service.WishlistService
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,7 +31,7 @@ class WishlistController(
      * 찜한 상품 보기
      */
     @GetMapping("/all")
-    fun getWishlist(): List<WishlistDto> {
+    fun getWishlist(): List<WishlistResponseDto> {
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         return wishlistService.getWishlist(userId)
     }

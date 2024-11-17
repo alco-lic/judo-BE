@@ -1,5 +1,6 @@
 package com.example.judo.orders.repository
 
+import com.example.judo.member.entity.Member
 import com.example.judo.orders.entity.Orders
 import com.example.judo.orders.entity.PaymentHistory
 import org.springframework.data.jpa.repository.JpaRepository
