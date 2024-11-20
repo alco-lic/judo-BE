@@ -17,6 +17,7 @@ class RecommendationService(
     private val ordersRepository: OrdersRepository,
     private val drinkRepository: DrinkRepository,
     private val memberRepository: MemberRepository,
+    private val drinkFeatureService: DrinkFeatureService
 ) {
 
     // 찜한 상품에 대한 유사 상품 추천
@@ -29,7 +30,7 @@ class RecommendationService(
         val recommendedDrinks = mutableSetOf<Drink>()
         wishlist.forEach { wishlistItem ->
             val drink = wishlistItem.drink
-            val similarDrinks = drinkRepository.findByTypeOrTasteProfile(drink.type, drink.tasteProfile)
+            val similarDrinks = findSimilarDrinks(drink)
             recommendedDrinks.addAll(similarDrinks)
         }
         return recommendedDrinks.toList()
@@ -39,11 +40,10 @@ class RecommendationService(
     fun getRecommendationsFromCart(userId: Long): List<Drink> {
         val cartItems = cartRepository.findByMemberId(userId)
             ?: throw InvalidInputException("회원 정보가 존재하지 않습니다.")
-        // 유사 상품 추천: 장바구니에 담긴 상품과 비슷한 상품 추천
         val recommendedDrinks = mutableSetOf<Drink>()
         cartItems?.forEach { cartItem ->
             val drink = cartItem.drink
-            val similarDrinks = drinkRepository.findByTypeOrTasteProfile(drink.type, drink.tasteProfile)
+            val similarDrinks = findSimilarDrinks(drink)
             recommendedDrinks.addAll(similarDrinks)
         }
         return recommendedDrinks.toList()
@@ -55,16 +55,30 @@ class RecommendationService(
             ?: throw InvalidInputException("회원 정보가 존재하지 않습니다.")
         val orders = ordersRepository.findAllByMember(findMember)
 
-        // 유사 상품 추천: 구매한 상품과 비슷한 상품 추천
         val recommendedDrinks = mutableSetOf<Drink>()
         orders.forEach { ordersItem ->
-            ordersItem.items.forEach{ ordersItem ->
-                val similarDrinks = drinkRepository.findByTypeOrTasteProfile(ordersItem.drink.type, ordersItem.drink.tasteProfile)
-            recommendedDrinks.addAll(similarDrinks)
+            ordersItem.items.forEach { ordersItem ->
+                val similarDrinks = findSimilarDrinks(ordersItem.drink)
+                recommendedDrinks.addAll(similarDrinks)
             }
         }
 
         return recommendedDrinks.toList()
+    }
+
+    // 유사 상품 찾기 (코사인 유사도 기반)
+    private fun findSimilarDrinks(targetDrink: Drink): List<Drink> {
+        val targetVector = drinkFeatureService.vectorizeDrink(targetDrink)
+
+        // 모든 음료에 대해 유사도를 계산하고, 코사인 유사도가 높은 순으로 정렬
+        val allDrinks = drinkRepository.findAll()
+        val drinkSimilarities = allDrinks
+            .filter { it.id != targetDrink.id } // 자기 자신 제외
+            .map { it to drinkFeatureService.cosineSimilarity(targetVector, drinkFeatureService.vectorizeDrink(it)) }
+            .sortedByDescending { it.second } // 유사도 내림차순 정렬
+
+        // 상위 5개의 유사 음료 반환
+        return drinkSimilarities.take(5).map { it.first }
     }
 
     // 통합 추천 로직: 찜한 상품, 장바구니, 구매 내역을 모두 반영하여 추천

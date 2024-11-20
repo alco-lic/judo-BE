@@ -43,6 +43,7 @@ class SecurityConfig(
                         "/api/cart/**",
                         "/api/orders/**",
                         "/api/recommendations/**",
+                        "/api/drink-feature/**"
                     ).hasRole("MEMBER")
             }
             .exceptionHandling { it.authenticationEntryPoint(customAuthenticationEntryPoint()) }
